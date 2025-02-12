@@ -11,7 +11,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 const corsOptions = {
-    origin: ['http://localhost:5173', 'https://clync-frontend.vercel.app'], // Add Vercel URL here
+    origin: ['http://localhost:5173', 'https://clync-v1.vercel.app'], // Add Vercel URL here
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
