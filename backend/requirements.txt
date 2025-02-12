@@ -1,0 +1,6 @@
+Flask==2.3.2              # Web framework for building the API
+Flask-Cors==4.0.0         # Enable CORS for frontend-backend communication
+SQLAlchemy==2.0.20        # ORM for database interactions
+python-dotenv==1.0.0      # Load environment variables (optional but recommended)
+pdfplumber==0.9.0         # PDF parsing library (if you plan to extract data from PDFs)
+pytest==7.4.0             # Testing framework (optional but recommended)
