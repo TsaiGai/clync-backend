@@ -3,19 +3,6 @@ const router = express.Router();
 const Apartment = require("../models/Apartment");
 const User = require("../models/User");
 
-// ✅ GET apartments for a specific user (Main Route for Frontend)
-router.get("/user/:userId/apartments", async (req, res) => { 
-  try {
-    const user = await User.findById(req.params.userId).populate("apartments");
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    res.json(user.apartments);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 // ❌ Disable GET all apartments (only for admin or remove completely)
 router.get("/", async (req, res) => {
   return res.status(403).json({ error: "Access denied" });
