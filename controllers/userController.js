@@ -1,16 +1,16 @@
+// controllers/userController.js
 const User = require("../models/User");
 
 async function getUserApartments(req, res) {
-  const { userId } = req.params;
-
   try {
-    const user = await User.findById(userId).populate("apartments").exec();
+    const user = await User.findById(req.params.userId).populate("apartments").exec();
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ error: "User not found" });
     }
     res.status(200).json(user.apartments);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch apartments" });
+    console.error("Error fetching apartments:", error);
+    res.status(500).json({ error: "Failed to fetch apartments" });
   }
 }
 
