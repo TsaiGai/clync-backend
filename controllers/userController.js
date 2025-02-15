@@ -3,7 +3,9 @@ const User = require("../models/User");
 
 async function getUserApartments(req, res) {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findById(req.params.userId).populate("apartments").exec();
+    const user2 = await User.findById(req.params.userId);
+
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }

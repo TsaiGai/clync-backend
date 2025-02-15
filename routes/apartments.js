@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const { apartment_name, unit_type, users } = req.body;
-
+        
     if (!apartment_name || !unit_type) {
       return res.status(400).json({ error: "apartment_name and unit_type are required" });
     }
