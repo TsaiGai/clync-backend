@@ -62,20 +62,4 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// ✅ TOGGLE apartment status
-router.put("/:id/toggle", async (req, res) => {
-  try {
-    const apartment = await Apartment.findById(req.params.id);
-    if (!apartment) {
-      return res.status(404).json({ error: "Apartment not found" });
-    }
-
-    apartment.status = apartment.status === "active" ? "inactive" : "active";
-    await apartment.save();
-    res.json({ message: "Status updated", status: apartment.status });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to update status" });
-  }
-});
-
 module.exports = router;

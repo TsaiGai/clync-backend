@@ -2,10 +2,17 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-// const validator = require('validator');  // For email validation
-require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config();
 
 const router = express.Router();
+
+// Password Validation Function
+const isValidPassword = (password) => {
+    console.log("Validating password:", password);
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+};
 
 // Register Route
 router.post('/register', async (req, res) => {
@@ -14,6 +21,14 @@ router.post('/register', async (req, res) => {
     // Basic validation
     if (!name || !email || !password) {
         return res.status(400).json({ success: false, message: "Please provide all required fields" });
+    }
+
+    // Check password strength
+    if (!isValidPassword(password)) {
+        return res.status(400).json({
+            success: false,
+            message: "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character."
+        });
     }
 
     try {
@@ -28,14 +43,12 @@ router.post('/register', async (req, res) => {
 
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
         
-        // Add a success field here
         res.json({ success: true, token, userId: user.id });
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, message: "Server error" });
     }
 });
-
 
 // Login Route
 router.post('/login', async (req, res) => {
