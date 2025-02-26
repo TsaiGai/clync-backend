@@ -37,6 +37,42 @@ router.post("/", async (req, res) => {
   }
 });
 
+// ✅ UPDATE an apartment and ensure it belongs to one of the provided users
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { apartment_name, unit_type, users } = req.body;
+    console.log("Received request to update apartment:", { id, apartment_name, unit_type, users });
+
+    // Validate required fields
+    if (!apartment_name || !unit_type) {
+      return res.status(400).json({ error: "apartment_name and unit_type are required" });
+    }
+
+    if (!Array.isArray(users) || users.length === 0) {
+      return res.status(400).json({ error: "At least one user ID must be provided" });
+    }
+
+    // Ensure the apartment exists and belongs to one of the provided users
+    const apartment = await Apartment.findOne({ _id: id, users: { $in: users } });
+
+    if (!apartment) {
+      return res.status(404).json({ error: "Apartment not found or you do not have permission to edit this apartment" });
+    }
+
+    // ✅ Update apartment
+    const updatedApartment = await Apartment.findByIdAndUpdate(
+      id,
+      { $set: req.body },
+      { new: true }
+    );
+
+    res.json(updatedApartment);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update apartment" });
+  }
+});
+
 // ✅ DELETE an apartment
 router.delete("/:id", async (req, res) => {
   try {
